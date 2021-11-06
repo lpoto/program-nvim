@@ -82,6 +82,10 @@ function M.run_program(args)
 	require('program.run_program').run_program(args)
 end
 
+function M.toggle_errorlist()
+	require('program.run_program').errorlist_toggle()
+end
+
 function M.toggle_terminal()
 	require('program.terminal').terminal_toggle()
 end

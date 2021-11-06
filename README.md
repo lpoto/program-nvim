@@ -16,21 +16,23 @@ Install with your favourite package manager.
 * asynchronous program running
 	- allows setting interpreters, compilers and executions for each filetype
 	- formater option may be added to the filetype if [neoformat](https://github.com/sbdchd/neoformat) is installed
-* Project specific lua configs
+* Project specific lua configs saved in neovim's config directory
 
-See all the availible functions with `:lua require('program').functions()`
-Edit a project's config with `:lua require('program').local_config()`
-Additional config files will be stored in `nvim/.projects/`
+See all the availible functions with `:lua require('program').functions()`.
+
+Edit a project's config with `:lua require('program').local_config()`.
+
+Additional config files will be stored in `nvim/.projects/`.
 
 ## example init.vim config
 
-**NOTE** Same config can be added to a project's config file
 
 ```LUA
 
 lua <<EOF
 
 -- run the program with :R
+-- adding additional arguments to R will add them to the command executed in terminal
 vim.api.nvim_command[[
 	command! -complete=file -nargs=* R lua require('program').run_program(<q-args>)
 ]]
@@ -47,31 +49,38 @@ vim.api.nvim_command[[
 
 require('program').setup({
 	errorlist = {
-		size = 80,
-		type = 0,
-		save = true,
+		size = 80, --size of the errorlist window
+		type = 0, -- 0 - vertical split, 1 - horizontal split
+		save = true -- save when running the program
 	},
 	terminal = {
-		size = 60,
-		type = 0
+		size = 60, --size of terminal window
+		type = 0 -- 0 - vertical, 1 - horizontal
 	},
 
+	-- remaps
 	keymaps = {
+		-- toggle terminal window with "f4"
 		toggle_terminal = {
 			key = "<F4>",
 			modes = {"n", "t"},
-			args = {noremap = true}
+			args = {noremap = true, silent = true}
 		},
+		-- toggle the program's errorlist with "leader + e"
 		toggle_errorlist = {
 			key = "<leader>e",
-			modes = {"n"}
+			modes = {"n"},
+			args = {noremap = true}
 		},
+		-- format the file with "leader + f"
 		format = {
 			key = "<leader>f",
-			modes = {"n"}
+			modes = {"n"},
+			args = {noremap = true}
 		}
 	},
 
+	-- format even if no formater provided
 	format_unspecified = true
 
 	filetypes = {
@@ -81,10 +90,14 @@ require('program').setup({
 				args = {'%:p', '-d', '%:p:h/bin'},
 			},
 			execution = {
+				-- command called in terminal after compiling
 				exe = 'java',
 				args = {'%:p'},
+				-- end args will be added to the command last,
+				-- even after additional arguments added when calling the function
 				end_args = {'-d', '%:p:h/bin'},
 			},
+			-- neoformat
 			formater = {
 				enabled = {'astyle'},
 				astyle = {
@@ -94,7 +107,7 @@ require('program').setup({
 					},
 					stdin = true
 				},
-				save = true
+				save = true -- save the file when formating
 			}
 		},
 
@@ -112,6 +125,13 @@ require('program').setup({
 EOF
 
 ```
+**NOTE** Same config can be added to a project's config file
+
 
 **NOTE** paths in args can be given unexpanded (see `:h expand`),
-unexpanded patterns are detected in strings separated with `.` or `/` aswell (example: `"%:p:h/bin/%:p:t:r.class"`)
+unexpanded patterns are detected in strings separated with `.` or `/` aswell
+(example: `"%:p:h/bin/%:p:t:r.class"` would expand into `path-to-file's-directory/bin/file-name-with-extension-replaced-with-.class`)
+
+
+**NOTE** If there is `.git` folder in project's root, the root path will be detected
+even if your curent working directory is in a subdirectory.
