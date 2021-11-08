@@ -18,6 +18,9 @@ function M.setup(opts)
 		if not run.filetypes[filetype] then
 			run.filetypes[filetype] = {}
 		end
+		if v.compiler and not v.execution then
+			run.filetypes[filetype].execution = nil
+		end
 		for option, v2 in pairs(v) do
 			if option == 'compiler' or
 				option == 'interpreter' or
