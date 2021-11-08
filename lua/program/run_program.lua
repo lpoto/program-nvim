@@ -194,7 +194,7 @@ function M.run_program(args)
 	print(txt)
 end
 
-function M.errorlist_toggle()
+function M.toggle_errorlist()
 	local bufnr = vim.fn.bufnr("_errorlist_")
 	if bufnr == -1 then
 		print("The program is not running")

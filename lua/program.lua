@@ -71,7 +71,8 @@ local functions = {
 	'toggle_errorlist()',
 	'format()',
 	'local_config()',
-	'source_local_config()'
+	'source_local_config()',
+	'get_root()'
 }
 
 function M.functions()
@@ -83,11 +84,11 @@ function M.run_program(args)
 end
 
 function M.toggle_errorlist()
-	require('program.run_program').errorlist_toggle()
+	require('program.run_program').toggle_errorlist()
 end
 
 function M.toggle_terminal()
-	require('program.terminal').terminal_toggle()
+	require('program.terminal').toggle_terminal()
 end
 
 function M.source_local_config()
@@ -98,6 +99,10 @@ end
 
 function M.local_config()
 	require('program.utils').local_config()
+end
+
+function M.get_root()
+	require('program.utils').getcwd()
 end
 
 return M

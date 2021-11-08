@@ -37,7 +37,7 @@ local create_window = function()
 	end
 end
 
-function M.terminal_toggle()
+function M.toggle_terminal()
 	local term_buffers = vim.fn.split(vim.fn.execute('buffers R'), '\n')
 	if term_buffers == nil or next(term_buffers) == nil then
 		create_window();
