@@ -10,10 +10,10 @@
 
 local M = {}
 
-local filetypes = {}
-local format_unspecified = true
+M.setup_loaded = false
 
 function M.setup(opts)
+	if M.setup_loaded then return end
 	local r, e = pcall(require('program.terminal').setup, opts.terminal)
 	if not r then
 		print("ERROR program.nvim - setup.terminal")
@@ -29,47 +29,13 @@ function M.setup(opts)
 		print("ERROR program.nvim - setup.filetypes")
 		print(e)
 	end
-	r, e = pcall(require('program.keymaps').setup, opts.keymaps)
-	if not r then
-		print("ERROR program.nvim - setup.keymaps")
-		print(e)
-	end
-	if opts.format_unspecified then
-		if type(opts.format_unspecified) ~= "boolean" then
-			print("WARNING program.nvim - setup.format_unspecified")
-			print("'format_unspecified' needs to be a boolean")
-		else
-			format_unspecified = opts.format_unspecified
-		end
-
-	end
-end
-
--- format if no formatter specified
-if format_unspecified then
-	vim.g['neoformat_basic_format_align'] = 1
-	vim.g['neoformat_basic_format_trim'] = 1
-end
-
-function M.format()
-	local ft = vim.o.filetype
-	if vim.fn.exists(':Neoformat') == 0 then
-		print('neoformat not installed')
-		return
-	end
-	if filetypes[ft] and filetypes[ft].formater and
-		filetypes[ft].formater.save then
-		vim.cmd("Neoformat | silent w")
-	else
-		vim.cmd("Neoformat")
-	end
+	M.setup_loaded = true
 end
 
 local functions = {
 	'run_program(args)',
 	'toggle_terminal()',
 	'toggle_errorlist()',
-	'format()',
 	'local_config()',
 	'source_local_config()',
 	'get_root()'
@@ -92,9 +58,12 @@ function M.toggle_terminal()
 end
 
 function M.source_local_config()
+	local x = M.setup_loaded
+	M.setup_loaded = false
 	require('program.utils').source_lua_file(
 		require('program.utils').config_file()
 	)
+	if not M.setup_loaded then M.setup_loaded = x end
 end
 
 function M.local_config()

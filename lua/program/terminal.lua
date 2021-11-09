@@ -1,6 +1,9 @@
 local M = {}
 
-local options = {}
+local options = {
+	size = 80,
+	type = 0
+}
 
 function M.setup(opts)
 	if not opts then return end

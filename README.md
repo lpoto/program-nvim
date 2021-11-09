@@ -7,15 +7,26 @@
 
 Install with your favourite package manager.
 
-* Intallation with [vim-plug](https://github.com/junegunn/vim-plug):
+- Installation with [wbthomason/packer.nvim](https://github.com/wbthomason/packer.nvim)
 ```
-	Plug 'lpoto/program.nvim'
+	use {'lpoto/program.nvim'}
 ```
+
+- It can be lazi loaded
+```
+	use {
+		'lpoto/program.nvim',
+		opt = true,
+		module = {'program'}
+		}
+```
+**NOTE** when lazy loading, the local config will be sourced only when you
+first require the module
+
 ## Features 
 
 * asynchronous program running
 	- allows setting interpreters, compilers and executions for each filetype
-	- formater option may be added to the filetype if [neoformat](https://github.com/sbdchd/neoformat) is installed
 * Project specific lua configs saved in neovim's config directory
 
 See all the availible functions with `:lua require('program').functions()`.
@@ -27,25 +38,28 @@ Additional config files will be stored in `nvim/.projects/`.
 ## example init.vim config
 
 
+```VIM
+
+" run the program with :R
+" adding additional arguments to R will add them to the command executed in terminal
+command! -complete=file -nargs=* R lua require('program').run_program(<q-args>)
+
+" edit project's local config with :Config
+command! Config lua require('program').local_config()
+
+command! ConfigSource lua require('program').source_local_config()
+
+"togle terminal with "f4"
+nnoremap <F4> <cmd>lua require('program').toggle_terminal()<CR>
+tnoremap <F4> <C-\><C-n><cmd>lua require('program').toggle_terminal()<CR>
+
+"togle errorlist with "<leader> + e""
+nnoremap <leader>e <cmd>lua require('program').toggle_errorlist()<CR>
+
+
+```
 ```LUA
-
 lua <<EOF
-
--- run the program with :R
--- adding additional arguments to R will add them to the command executed in terminal
-vim.api.nvim_command[[
-	command! -complete=file -nargs=* R lua require('program').run_program(<q-args>)
-]]
-
--- edit project's local config with :Config
-vim.api.nvim_command[[
-	command! Config lua require('program').local_config()
-]]
-
--- source project's local config with :ConfigSource
-vim.api.nvim_command[[
-	command! ConfigSource lua require('program').source_local_config()
-]]
 
 require('program').setup({
 	errorlist = {
@@ -57,31 +71,6 @@ require('program').setup({
 		size = 60, --size of terminal window
 		type = 0 -- 0 - vertical, 1 - horizontal
 	},
-
-	-- remaps
-	keymaps = {
-		-- toggle terminal window with "f4"
-		toggle_terminal = {
-			key = "<F4>",
-			modes = {"n", "t"},
-			args = {noremap = true, silent = true}
-		},
-		-- toggle the program's errorlist with "leader + e"
-		toggle_errorlist = {
-			key = "<leader>e",
-			modes = {"n"},
-			args = {noremap = true}
-		},
-		-- format the file with "leader + f"
-		format = {
-			key = "<leader>f",
-			modes = {"n"},
-			args = {noremap = true}
-		}
-	},
-
-	-- format even if no formater provided
-	format_unspecified = true
 
 	filetypes = {
 		java = {
@@ -96,18 +85,6 @@ require('program').setup({
 				-- end args will be added to the command last,
 				-- even after additional arguments added when calling the function
 				end_args = {'-d', '%:p:h/bin'},
-			},
-			-- neoformat
-			formater = {
-				enabled = {'astyle'},
-				astyle = {
-					exe = 'astyle',
-					args = {
-						'--mode=java', '--indent=force-tab=4'
-					},
-					stdin = true
-				},
-				save = true -- save the file when formating
 			}
 		},
 
@@ -115,9 +92,6 @@ require('program').setup({
 			interpreter = {
 				exe = "python3",
 				args = {"%:p"}
-			},
-			formater = {
-				enabled = {'autopep8'}
 			}
 		}
 	}
@@ -125,7 +99,7 @@ require('program').setup({
 EOF
 
 ```
-**NOTE** Same config can be added to a project's config file
+**NOTE** Same config can be added to a project's config file, local config has priority
 
 
 **NOTE** paths in args can be given unexpanded (see `:h expand`),
