@@ -11,6 +11,9 @@
 local M = {}
 
 M.setup_loaded = false
+local format_unspecified = true
+local filetypes = {}
+
 
 function M.setup(opts)
 	if M.setup_loaded then return end
@@ -29,6 +32,14 @@ function M.setup(opts)
 		print("ERROR program.nvim - setup.filetypes")
 		print(e)
 	end
+	if opts.format_unspecified then
+		if type(opts.format_unspecified) ~= "boolean" then
+			print("WARNING program.nvim - setup.format_unspecified")
+			print("'format_unspecified' needs to be a boolean")
+		else
+			format_unspecified = opts.format_unspecified
+		end
+	end
 	M.setup_loaded = true
 end
 
@@ -37,12 +48,33 @@ local functions = {
 	'toggle_terminal()',
 	'toggle_errorlist()',
 	'local_config()',
+	'format()',
 	'source_local_config()',
 	'get_root()'
 }
 
 function M.functions()
 	print(table.concat(functions, ', '))
+end
+
+-- format if no formatter specified
+if format_unspecified then
+	vim.g['neoformat_basic_format_align'] = 1
+	vim.g['neoformat_basic_format_trim'] = 1
+end
+
+function M.format()
+	local ft = vim.o.filetype
+	if vim.fn.exists(':Neoformat') == 0 then
+		print('neoformat not installed')
+		return
+	end
+	if filetypes[ft] and filetypes[ft].formater and
+		filetypes[ft].formater.save then
+		vim.cmd("Neoformat | silent w")
+	else
+		vim.cmd("Neoformat")
+	end
 end
 
 function M.run_program(args)
