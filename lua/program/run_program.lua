@@ -52,6 +52,7 @@ end
 
 local build_command = function(args)
 	local cmd = ""
+    local opts = {}
 	args = vim.fn.split(args, ';') or {}
 	local compiler_args = nil
 	local execution_args = nil
@@ -71,47 +72,43 @@ local build_command = function(args)
 		cmd = M.filetypes[ft].interpreter.exe
 		if M.filetypes[ft].interpreter.args and
 			next(M.filetypes[ft].interpreter.args) then
-			for i, v in pairs(M.filetypes[ft].interpreter.args) do
-				M.filetypes[ft].interpreter.args[i] = require(
-						'program.utils').expand(v)
+            local interpreter_args = {}
+			for i, v in ipairs(M.filetypes[ft].interpreter.args) do
+                interpreter_args[i] = require('program.utils').expand(v)
 			end
-			cmd = cmd.." "..table.concat(
-						M.filetypes[ft].interpreter.args, " ")
+			cmd = cmd.." "..table.concat(interpreter_args, " ")
 		end
 		if compiler_args then
 			cmd = cmd.." "..compiler_args
 		end
 		if M.filetypes[ft].interpreter.end_args and
 			next(M.filetypes[ft].interpreter.end_args) then
-			for i, v in pairs(M.filetypes[ft].interpreter.end_args) do
-				M.filetypes[ft].interpreter.end_args[i] = require(
-							'program.utils').expand(v)
+            local interpreter_end_args = {}
+			for i, v in ipairs(M.filetypes[ft].interpreter.end_args) do
+				interpreter_end_args[i] = require('program.utils').expand(v)
 			end
-			cmd = cmd.." "..table.concat(
-						M.filetypes[ft].interpreter.end_args, " ")
+			cmd = cmd.." "..table.concat(interpreter_end_args, " ")
 		end
 	elseif M.filetypes[ft].compiler then
 		cmd = M.filetypes[ft].compiler.exe
 		if M.filetypes[ft].compiler.args and
 			next(M.filetypes[ft].compiler.args) then
-			for i, v in pairs(M.filetypes[ft].compiler.args) do
-				M.filetypes[ft].compiler.args[i] = require(
-						'program.utils').expand(v)
+            local comp_args = {}
+			for i, v in ipairs(M.filetypes[ft].compiler.args) do
+				comp_args[i] = require('program.utils').expand(v)
 			end
-			cmd = cmd.." "..table.concat(
-						M.filetypes[ft].compiler.args, " ")
+			cmd = cmd.." "..table.concat(comp_args, " ")
 		end
 		if compiler_args then
 			cmd = cmd.." "..compiler_args
 		end
 		if M.filetypes[ft].compiler.end_args and
 			next(M.filetypes[ft].compiler.end_args) then
-			for i, v in pairs(M.filetypes[ft].compiler.end_args) do
-				M.filetypes[ft].compiler.end_args[i] = require(
-							'program.utils').expand(v)
+            local comp_end_args = {}
+			for i, v in ipairs(M.filetypes[ft].compiler.end_args) do
+				comp_end_args[i] = require('program.utils').expand(v)
 			end
-			cmd = cmd.." "..table.concat(
-						M.filetypes[ft].compiler.end_args, " ")
+			cmd = cmd.." "..table.concat(comp_end_args, " ")
 		end
 		if M.filetypes[ft].execution then
 			cmd = cmd.."  && "
@@ -120,12 +117,11 @@ local build_command = function(args)
 			end
 			if M.filetypes[ft].execution.args and
 				next(M.filetypes[ft].execution.args) then
-			for i, v in pairs(M.filetypes[ft].execution.args) do
-				M.filetypes[ft].execution.args[i] = require(
-						'program.utils').expand(v)
+            local exec_args = {}
+			for i, v in ipairs(M.filetypes[ft].execution.args) do
+				exec_args[i] = require('program.utils').expand(v)
 			end
-				cmd = cmd.." "..table.concat(
-						M.filetypes[ft].execution.args, " ")
+				cmd = cmd.." "..table.concat(exec_args, " ")
 			end
 		end
 		if execution_args then
@@ -134,12 +130,11 @@ local build_command = function(args)
 		if M.filetypes[ft].execution and
 			M.filetypes[ft].execution.end_args and
 			next(M.filetypes[ft].execution.end_args) then
-			for i, v in pairs(M.filetypes[ft].execution.end_args) do
-				M.filetypes[ft].execution.end_args[i] = require(
-							'program.utils').expand(v)
+            local exec_end_args = {}
+			for i, v in ipairs(M.filetypes[ft].execution.end_args) do
+				exec_end_args[i] = require('program.utils').expand(v)
 			end
-			cmd = cmd.." "..table.concat(
-						M.filetypes[ft].execution.end_args, " ")
+			cmd = cmd.." "..table.concat(exec_end_args, " ")
 		end
 	end
 	return cmd
