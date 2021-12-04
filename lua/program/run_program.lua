@@ -52,7 +52,6 @@ end
 
 local build_command = function(args)
 	local cmd = ""
-    local opts = {}
 	args = vim.fn.split(args, ';') or {}
 	local compiler_args = nil
 	local execution_args = nil
@@ -80,6 +79,9 @@ local build_command = function(args)
 		end
 		if compiler_args then
 			cmd = cmd.." "..compiler_args
+        end
+		if execution_args then
+			cmd = cmd.." "..execution_args
 		end
 		if M.filetypes[ft].interpreter.end_args and
 			next(M.filetypes[ft].interpreter.end_args) then

@@ -9,7 +9,7 @@
 - asynchronous program running
   - allows setting interpreters, compilers and executions for each filetype
 
-See all the availible functions with `:lua require('program').functions()`.
+See all the available functions with `:lua require('program').functions()`.
 
 ## Configuration
 
@@ -17,18 +17,18 @@ Install with your favourite package manager.
 
 - Installation with [wbthomason/packer.nvim](https://github.com/wbthomason/packer.nvim)
 
-```
-	use {'lpoto/program-nvim'}
+```LUA
+use {'lpoto/program-nvim'}
 ```
 
 - It can be lazy loaded
 
-```
-	use {
-		'lpoto/program-nvim',
-		opt = true,
-		module = {'program'}
-	}
+```LUA
+use {
+	'lpoto/program-nvim',
+	opt = true,
+	module = {'program'}
+}
 ```
 
 ## example init.vim config
@@ -91,6 +91,8 @@ require('program').setup({
 EOF
 
 ```
+
+##
 
 **NOTE** paths in args can be given unexpanded (see `:h expand`),
 unexpanded patterns are detected in strings separated with `.` or `/` aswell
