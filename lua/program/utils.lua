@@ -13,11 +13,15 @@ function M.expand(args)
 					string.sub(v2, 1, 3) == '%:t' or
 					string.sub(v2, 1, 3) == '%:r' or
 					string.sub(v2, 1, 3) == '%:e'then
-                    if string.sub(v2, -2) ==  ":u" then
+                    if string.find(v2, ":u") ~= nil then
                         parts[k2] = string.upper(
-                        vim.fn.expand(string.sub(v2, 1, -3)))
+                        vim.fn.expand(string.gsub(v2, ':u', '')))
+                    elseif string.find(v2, ":l") ~= nil then
+                        parts[k2] = string.lower(
+                        vim.fn.expand(string.gsub(v2, ':l', '')))
+                    else
+					    parts[k2] = vim.fn.expand(v2)
                     end
-					parts[k2] = vim.fn.expand(v2)
 				else
 					parts[k2] = v2
 				end
