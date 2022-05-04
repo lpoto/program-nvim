@@ -67,6 +67,9 @@ local build_command = function(args)
 		execution_args = args[1]
 	end
 	local ft = vim.o.filetype
+    if not M.filetypes[ft] then
+        ft = '*'
+    end
 	if M.filetypes[ft].interpreter then
 		cmd = M.filetypes[ft].interpreter.exe
 		if M.filetypes[ft].interpreter.args and
@@ -144,6 +147,9 @@ end
 
 function M.run_program(args)
 	local ft = vim.o.filetype
+    if not M.filetypes[ft] then
+        ft = '*'
+    end
 	if not M.filetypes[ft] or (
 		not M.filetypes[ft].compiler and
 		not M.filetypes[ft].interpreter

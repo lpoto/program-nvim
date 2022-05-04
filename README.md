@@ -86,6 +86,13 @@ require('program').setup({
 				args = {"%:p"}
 			}
 		}
+
+        ['*'] = {
+            interpreter = {
+                exe = "echo"
+                args = {"You can use star symbol to match all filetypes"}
+            }
+        }
 	}
 })
 EOF
