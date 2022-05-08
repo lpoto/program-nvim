@@ -52,15 +52,15 @@ function M.toggle_terminal()
 end
 
 function M.get_errorlist_config()
-    require('program.run_program').get_opts()
+    print(require('program.run_program').get_opts())
 end
 
 function M.get_terminal_config()
-    require('program.terminal').get_opts()
+    print(require('program.terminal').get_opts())
 end
 
 function M.get_filetypes_config()
-    require('program.run_program').get_filetypes_opts()
+    print(require('program.run_program').get_filetypes_opts())
 end
 
 return M
