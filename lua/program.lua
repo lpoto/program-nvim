@@ -26,6 +26,20 @@ function M.setup(opts)
 	end
 end
 
+local function dump(o)
+   if type(o) == 'table' then
+      local s = '{ '
+      for k,v in pairs(o) do
+         if type(k) ~= 'number' then k = '"'..k..'"' end
+         s = s .. '['..k..'] = ' .. dump(v) .. ','
+      end
+      return s .. '} '
+   else
+      return tostring(o)
+   end
+end
+
+
 local functions = {
 	'run_program(args)',
 	'toggle_terminal()',
@@ -52,15 +66,15 @@ function M.toggle_terminal()
 end
 
 function M.get_errorlist_config()
-    print(require('program.run_program').get_opts())
+    print(dump(require('program.run_program').get_opts()))
 end
 
 function M.get_terminal_config()
-    print(require('program.terminal').get_opts())
+    print(dump(require('program.terminal').get_opts()))
 end
 
 function M.get_filetypes_config()
-    print(require('program.run_program').get_filetypes_opts())
+    print(dump(require('program.run_program').get_filetypes_opts()))
 end
 
 return M
