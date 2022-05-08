@@ -144,7 +144,7 @@ function M.run_program(args)
         ft = "*"
     end
     if not M.filetypes[ft] or (not M.filetypes[ft].compiler and not M.filetypes[ft].interpreter) then
-        print("No compilers or interpreters config found for filetype '" .. ft .. "'")
+        print("No compilers or interpreters config found for filetype '" .. vim.o.filetype .. "'")
         return
     end
     vim.fn.execute("silent! bwipeout! " .. vim.fn.bufnr("_errorlist_"))
