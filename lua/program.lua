@@ -75,7 +75,7 @@ function M.get_terminal_config()
 end
 
 function M.get_filetypes_config()
-    print(dump(require("program.run_program").get_filetypes_opts()))
+    print(dump(require("program.run_program").filetypes))
 end
 
 function M.get_config()
@@ -83,7 +83,7 @@ function M.get_config()
         {
             terminal = require("program.terminal").get_opts(),
             errorlist = require("program.run_program").get_opts(),
-            filetypes = require("program.run_progam").get_filetypes_opts()
+            filetypes = require("program.run_program").filetypes
         }
     )
 end
