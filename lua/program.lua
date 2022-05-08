@@ -11,6 +11,7 @@ local M = {}
 function M.setup(opts)
     local allowed_keys = {
         filetypes = true,
+        filetype = true,
         terminal = true,
         errorlist = true
     }
@@ -19,6 +20,10 @@ function M.setup(opts)
             local e = "WARN program.nvim - setup: "
             print(e .. "Unrecognized setup table key: '" .. k .. "'.")
         end
+    end
+    if (opts.filetype and not opts.filetypes) then
+        opts.filetypes = opts.filetype
+        opts.filetype = nil
     end
     local r, e = pcall(require("program.terminal").setup, opts.terminal)
     if not r then
