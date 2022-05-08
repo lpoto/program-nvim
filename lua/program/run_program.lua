@@ -235,7 +235,7 @@ function M.get_opts()
     return options;
 end
 
-function M.get_filetype_opts()
+function M.get_filetypes_opts()
     return options;
 end
 
