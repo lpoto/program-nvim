@@ -231,4 +231,12 @@ function M.open_existing_errorlist(winnr, bufnr)
 	end
 end
 
+function M.get_opts()
+    return options;
+end
+
+function M.get_filetype_opts()
+    return options;
+end
+
 return M

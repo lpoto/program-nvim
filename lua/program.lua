@@ -30,6 +30,9 @@ local functions = {
 	'run_program(args)',
 	'toggle_terminal()',
 	'toggle_errorlist()',
+    'get_filetypes_config()',
+    'get_errorlist_config()',
+    'get_terminal_config()',
 }
 
 function M.functions()
@@ -46,6 +49,18 @@ end
 
 function M.toggle_terminal()
 	require('program.terminal').toggle_terminal()
+end
+
+function M.get_errorlist_config()
+    require('program.run_program').get_opts()
+end
+
+function M.get_terminal_config()
+    require('program.terminal').get_opts()
+end
+
+function M.get_filetypes_config()
+    require('program.run_program').get_filetypes_opts()
 end
 
 return M

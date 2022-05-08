@@ -59,5 +59,8 @@ function M.toggle_terminal()
 	vim.cmd("startinsert!")
 end
 
+function M.get_opts()
+    return options;
+end
 
 return M
