@@ -26,20 +26,22 @@ function M.setup(opts)
     end
 end
 
-local function dump(o)
+local function dump_recursively(o, n)
     if type(o) == "table" then
-        local s = "{ "
+        local s = string.rep(' ', n - 2) .. "{\n"
         for k, v in pairs(o) do
-            if type(k) ~= "number" then
-                k = '"' .. k .. '"'
-            end
-            s = s .. "[" .. k .. "] = " .. dump(v) .. ","
+            s = s .. string.rep(" ", n) .. k .. " = " .. dump_recursively(v, n + 2) .. ",\n"
         end
-        return s .. "} "
+        return s .. "\n" .. string.rep(' ', n - 2) .. "}"
     else
         return tostring(o)
     end
 end
+
+local function dump(o)
+    return dump_recursively(o, 2);
+end
+
 
 local functions = {
     "run_program(args)",
