@@ -5,7 +5,7 @@ local options = {
     type = 0
 }
 
-function M.setup(opts)
+local function setup(opts, ifNotExists)
     if not opts then
         return
     end
@@ -14,22 +14,34 @@ function M.setup(opts)
         print("'terminal' needs to be a table")
         return
     end
-    if opts.size then
-        if opts.size < 10 or opts.size > 200 then
-            print("WARNING program.nvim - setup.terminal")
-            print("'terminal.size'" .. "can only be between 10 and 200")
-        else
-            options.size = opts.size
+    if options.size == nil or ~ifNotExists then
+        if opts.size then
+            if opts.size < 10 or opts.size > 200 then
+                print("WARNING program.nvim - setup.terminal")
+                print("'terminal.size'" .. "can only be between 10 and 200")
+            else
+                options.size = opts.size
+            end
         end
     end
-    if opts.type then
-        if (opts.type ~= 0 and opts.type ~= 1) then
-            print("WARNING program.nvim - setup.terminal")
-            print("'terminal.type' can only be 0 or 1")
-        else
-            options.type = opts.type
+    if options.type == nil or ~ifNotExists then
+        if opts.type then
+            if (opts.type ~= 0 and opts.type ~= 1) then
+                print("WARNING program.nvim - setup.terminal")
+                print("'terminal.type' can only be 0 or 1")
+            else
+                options.type = opts.type
+            end
         end
     end
+end
+
+function M.setup(opts)
+    setup(opts, false)
+end
+
+function M.setupIfNoConfig(opts)
+    setup(opts, true)
 end
 
 local create_window = function()

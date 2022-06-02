@@ -1,6 +1,6 @@
 local M = {}
 
-function M.setup(opts)
+local function setup(opts, ifNotExists)
     if not opts then
         return
     end
@@ -18,6 +18,8 @@ function M.setup(opts)
         end
         if not run.filetypes[filetype] then
             run.filetypes[filetype] = {}
+        elseif ifNotExists then
+            goto continue
         end
         if v.compiler and not v.execution then
             run.filetypes[filetype].execution = nil
@@ -39,6 +41,14 @@ function M.setup(opts)
         end
         ::continue::
     end
+end
+
+function M.setup(opts)
+    setup(opts, false)
+end
+
+function M.setupIfNoConfig(opts)
+    setup(opts, true)
 end
 
 return M

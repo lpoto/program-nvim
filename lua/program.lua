@@ -42,7 +42,43 @@ function M.setup(opts)
     end
 end
 
+function M.setupIfNoConfig(opts)
+    local allowed_keys = {
+        filetypes = true,
+        filetype = true,
+        terminal = true,
+        errorlist = true
+    }
+    for k in pairs(opts) do
+        if not allowed_keys[k] then
+            local e = "WARN program.nvim - setup: "
+            print(e .. "Unrecognized setup table key: '" .. k .. "'.")
+        end
+    end
+    if (opts.filetype and not opts.filetypes) then
+        opts.filetypes = opts.filetype
+        opts.filetype = nil
+    end
+    local r, e = pcall(require("program.terminal").setupIfNoConfig, opts.terminal)
+    if not r then
+        local v = "ERROR program.nvim - setupIfNoConfig.terminal: "
+        print(v .. e)
+    end
+    r, e = pcall(require("program.run_program").setupIfNoConfig, opts.errorlist)
+    if not r then
+        local v = "ERROR program.nvim - setupIfNoConfig.run_program: "
+        print(v .. e)
+    end
+    r, e = pcall(require("program.filetypes").setupIfNoConfig, opts.filetypes)
+    if not r then
+        local v = "ERROR program.nvim - setupIfNoConfig.filetypes: "
+        print(v .. e)
+    end
+end
+
 local functions = {
+    "setup(opts)",
+    "setupIfNoConfig(opts)",
     "run_program(args)",
     "toggle_terminal()",
     "toggle_errorlist()",
