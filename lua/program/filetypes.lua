@@ -18,7 +18,7 @@ local function setup(opts, ifNotExists)
         end
         if not run.filetypes[filetype] then
             run.filetypes[filetype] = {}
-        elseif ifNotExists then
+        elseif ifNotExists == true then
             goto continue
         end
         if v.compiler and not v.execution then

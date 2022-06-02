@@ -14,7 +14,7 @@ local function setup(opts, ifNotExists)
         print("'terminal' needs to be a table")
         return
     end
-    if options.size == nil or ~ifNotExists then
+    if options.size == nil or ifNotExists == false then
         if opts.size then
             if opts.size < 10 or opts.size > 200 then
                 print("WARNING program.nvim - setup.terminal")
@@ -24,7 +24,7 @@ local function setup(opts, ifNotExists)
             end
         end
     end
-    if options.type == nil or ~ifNotExists then
+    if options.type == nil or ifNotExists == false then
         if opts.type then
             if (opts.type ~= 0 and opts.type ~= 1) then
                 print("WARNING program.nvim - setup.terminal")
